@@ -1,0 +1,32 @@
+name: Automated Reel Content Generator
+
+on:
+  schedule:
+    - cron: '0 9 * * *' # Roj subah 9 baje run hoga
+  workflow_dispatch: # Manual button se chalane ke liye
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run script
+        run: |
+          python generate_content.py
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Action Bot"
+          git config --global user.email "bot@github.com"
+          git add reel_script.txt
+          git commit -m "Auto-generate daily reel script" || exit 0
+          git push
