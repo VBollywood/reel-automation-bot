@@ -27,6 +27,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Action Bot"
           git config --global user.email "bot@github.com"
+          git pull origin main --rebase
           git add reel_script.txt
           git commit -m "Auto-generate daily reel script" || exit 0
-          git push
+          git push origin main
