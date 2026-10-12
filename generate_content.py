@@ -9,21 +9,19 @@ api_key = os.environ.get("GEMINI_API_KEY")
 def generate_ai_reel_script():
     if not api_key:
         print("Warning: GEMINI_API_KEY missing! Generating fallback script.")
-        ai_script = "Hello dosto, aaj hum seekhenge ek naye AI tool ke baare mein jo aapka kaam asan kar dega."
+        ai_script = "Hello dosto, aaj hum baat karenge duniya ke sabse behtareen AI tools aur software ke baare mein jo aapke kaam ko asan kar sakte hain. Is video mein hum dekhenge ki kaise alag-alag apps features aur step-by-step use kiye jate hain."
     else:
         try:
             client = genai.Client(api_key=api_key)
-            # Universal AI prompt jo kisi bhi naye AI tool, app, software ya GitHub tool ko uthayega
+            # Strict prompt taaki lambi aur detail script bane
             prompt = """
-            Aap ek expert AI tech creator hain jo Instagram Reels aur YouTube Shorts ke liye script likhte hain.
-            Internet par maujood kisi bhi ek behtareen AI tool, software, application ya developer tool (jaise ChatGPT, Claude, Cursor, Midjourney, v0, GitHub Copilot, ElevenLabs, etc. ya koi bhi naya trending AI tool) ko randomly chuniye jo repeat na ho.
-            
-            Us tool par ek 30-second ki engaging Hinglish script banaiye jismein yeh shamil ho:
-            1. Hook (0-5s): Tool ka naam aur uska sabse bada fayda.
-            2. Features & Use Case (5-20s): Yeh kya karta hai aur ise step-by-step kaise istemal karein.
-            3. Call to Action (20-30s): Follow for more daily AI tools updates.
-            
-            Script bilkul natural, clear aur conversational honi chahiye bina kisi extra brackets ke taaki voiceover mein acchi lage.
+            Write a detailed, high-energy 30-to-40 seconds Instagram Reel script in Hinglish about a trending AI tool, software, or GitHub automation app. 
+            Do not make it short. Include:
+            1. Introduction of the tool and what problem it solves.
+            2. Detailed features and step-by-step usage guide.
+            3. Why developers or creators should use it.
+            4. Clear Call to Action at the end.
+            Keep the language natural, conversational, and engaging for audio voiceover. No brackets or markdown symbols.
             """
             response = client.models.generate_content(
                 model='gemini-1.5-flash',
@@ -32,47 +30,47 @@ def generate_ai_reel_script():
             ai_script = response.text
         except Exception as e:
             print(f"API Error: {str(e)}")
-            ai_script = "Aaj ke is video mein hum baat karenge ek naye AI automation tool ki jo aapke sabhi tasks ko fast bana deta hai."
+            ai_script = "Aaj ke is video mein hum explore kar rahe hain ek naya powerful AI software jo aapke sabhi automation tasks ko automate kar sakta hai. Iske features aur use karne ke tareeqe ko hum step-by-step samjhenge."
 
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     script_content = f"""========================================
-DAILY AI & GITHUB TOOLS REEL SCRIPT - {current_time}
+AI TOOLS & SOFTWARE DEEP-DIVE - {current_time}
 ========================================
 
 {ai_script}
 """
 
-    # 1. Detailed Script Save Karein
+    # 1. Save Script
     with open("reel_script.txt", "w", encoding="utf-8") as f:
         f.write(script_content)
     
-    # 2. Text-to-Speech (Longer Voice-over for 30 seconds)
+    # 2. Generate Audio (Longer text will result in 30-40s audio)
     audio_path = "audio.mp3"
     try:
         tts = gTTS(text=ai_script, lang='hi', slow=False)
         tts.save(audio_path)
-        print("Detailed audio file generated successfully!")
+        print("Extended audio file generated successfully!")
     except Exception as e:
         print(f"Audio Generation Error: {str(e)}")
         return
 
-    # 3. Video Rendering with Audio Duration (Longer duration support)
+    # 3. Video Rendering (Ensuring minimum 30 seconds or matching audio length)
     try:
         audio_clip = AudioFileClip(audio_path)
-        duration = audio_clip.duration
+        duration = max(audio_clip.duration, 30.0) # Ensure at least 30 seconds duration
         
-        # Background video/color matching the audio duration
-        bg_clip = ColorClip(size=(720, 1280), color=(15, 23, 42)).with_duration(duration)
+        # Professional dark blue/indigo gradient background look
+        bg_clip = ColorClip(size=(720, 1280), color=(30, 41, 59)).with_duration(duration)
         video_clip = bg_clip.with_audio(audio_clip)
         
         video_output = "output_reel.mp4"
         video_clip.write_videofile(video_output, fps=24, codec="libx264", audio_codec="aac")
-        print("Complete 30-second AI Tool video reel generated successfully!")
+        print("30+ seconds video reel generated successfully!")
     except Exception as e:
         print(f"Video Generation Error: {str(e)}")
 
-    print("Automation pipeline finished successfully!")
+    print("Pipeline completed successfully!")
 
 if __name__ == "__main__":
     generate_ai_reel_script()
