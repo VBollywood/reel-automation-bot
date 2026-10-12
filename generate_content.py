@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from google import genai
 from gtts import gTTS
-from moviepy.editor import AudioFileClip, ColorClip
+from moviepy import AudioFileClip, ColorClip
 
 api_key = os.environ.get("GEMINI_API_KEY")
 
@@ -52,10 +52,10 @@ AI REEL SCRIPT - {current_time}
         duration = audio_clip.duration
         
         # Vertical reel size (720x1280) aur dark background color set karein
-        bg_clip = ColorClip(size=(720, 1280), color=(20, 20, 40), duration=duration)
+        bg_clip = ColorClip(size=(720, 1280), color=(20, 20, 40)).with_duration(duration)
         
         # Audio ko video ke sath combine karein
-        video_clip = bg_clip.set_audio(audio_clip)
+        video_clip = bg_clip.with_audio(audio_clip)
         
         # Final video output save karein
         video_output = "output_reel.mp4"
