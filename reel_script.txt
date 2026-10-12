@@ -1,6 +1,5 @@
+========================================
+AI REEL SCRIPT - 2026-10-12 09:03:48
+========================================
 
-    Topic: AI Tools for Productivity
-    - Hook (0-3 sec): Kya aapko pata hai AI kaise aapka aadha kaam kam kar sakta hai?
-    - Body (3-20 sec): Yeh rahe top 3 tools jo aapke daily task automate kar denge.
-    - Call to Action (20-30 sec): Maze ki reels ke liye follow karein!
-    
+Error during generation: 404 NOT_FOUND. {'error': {'code': 404, 'message': 'This model models/gemini-2.5-flash is no longer available to new users. Please update your code to use models/gemini-3.8-flash for the latest features and improvements. We recommend you to use the Interactions API (https://ai.google.dev/gemini-api/docs/get-started).', 'status': 'NOT_FOUND'}}
