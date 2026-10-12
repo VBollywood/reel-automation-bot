@@ -23,7 +23,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install google-genai gtts
+          pip install google-genai gtts moviepy
 
       - name: Run script
         env:
@@ -35,7 +35,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add reel_script.txt audio.mp3
-          git commit -m "Auto-generate daily reel script and voiceover" || exit 0
+          git add reel_script.txt audio.mp3 output_reel.mp4
+          git commit -m "Auto-generate script, voiceover and video reel" || exit 0
           git pull origin main --rebase
           git push origin main
