@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 from google import genai
 from gtts import gTTS
+from moviepy.editor import AudioFileClip, ColorClip
 
 api_key = os.environ.get("GEMINI_API_KEY")
 
@@ -12,7 +13,7 @@ def generate_ai_reel_script():
     else:
         try:
             client = genai.Client(api_key=api_key)
-            prompt = "Create a short 15-second viral Hindi/Hinglish Instagram reel script about a cool tech tip. Keep it pure text without brackets or extra formatting so it sounds natural in audio."
+            prompt = "Create a short 15-second viral Hindi/Hinglish Instagram reel script about a cool tech tip. Keep it pure text without brackets."
             response = client.models.generate_content(
                 model='gemini-1.5-flash',
                 contents=prompt,
@@ -36,14 +37,34 @@ AI REEL SCRIPT - {current_time}
         f.write(script_content)
     
     # 2. Text-to-Speech (Audio file create karein)
+    audio_path = "audio.mp3"
     try:
         tts = gTTS(text=ai_script, lang='hi', slow=False)
-        tts.save("audio.mp3")
-        print("Audio file (audio.mp3) generated successfully!")
+        tts.save(audio_path)
+        print("Audio file generated successfully!")
     except Exception as e:
         print(f"Audio Generation Error: {str(e)}")
+        return
 
-    print("Script and Voiceover process completed!")
+    # 3. Video Rendering (MoviePy se MP4 video banayein)
+    try:
+        audio_clip = AudioFileClip(audio_path)
+        duration = audio_clip.duration
+        
+        # Vertical reel size (720x1280) aur dark background color set karein
+        bg_clip = ColorClip(size=(720, 1280), color=(20, 20, 40), duration=duration)
+        
+        # Audio ko video ke sath combine karein
+        video_clip = bg_clip.set_audio(audio_clip)
+        
+        # Final video output save karein
+        video_output = "output_reel.mp4"
+        video_clip.write_videofile(video_output, fps=24, codec="libx264", audio_codec="aac")
+        print("Video reel (output_reel.mp4) generated successfully!")
+    except Exception as e:
+        print(f"Video Generation Error: {str(e)}")
+
+    print("Complete Reel Pipeline finished successfully!")
 
 if __name__ == "__main__":
     generate_ai_reel_script()
